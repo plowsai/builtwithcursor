@@ -1,25 +1,39 @@
-import ProjectGrid from './components/ProjectGrid';
-import ProjectForm from './components/ProjectForm';
-import { useProjects } from './hooks/useProjects';
-import './App.css';
+import { useState } from 'react'
+import './App.css'
+import ProjectGrid from './components/ProjectGrid'
+import ProjectForm from './components/ProjectForm'
 
 function App() {
-  const { projects, loading, error, addProject } = useProjects();
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  const [showForm, setShowForm] = useState(false)
 
   return (
     <div className="app">
-      <header>
-        <h1>Project Showcase</h1>
+      <header className="header">
+        <h1 className="title">Built with Cursor</h1>
+        <p className="subtitle">
+          Discover amazing projects built by the Cursor community. 
+          Share your own project and join the future of AI-powered development.
+        </p>
       </header>
-      <main>
-        <ProjectForm onProjectAdd={addProject} />
-        <ProjectGrid projects={projects} />
+
+      <main className="content">
+        <button 
+          className="add-project-button"
+          onClick={() => setShowForm(true)}
+        >
+          + Add Your Project
+        </button>
+
+        <ProjectGrid />
+
+        {showForm && (
+          <ProjectForm 
+            onClose={() => setShowForm(false)}
+          />
+        )}
       </main>
     </div>
-  );
+  )
 }
 
-export default App; 
+export default App 
