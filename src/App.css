@@ -59,4 +59,15 @@
 .add-project-button:hover {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.3);
+}
+
+.loading-container,
+.error-container {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.error-container {
+  color: #ff6b6b;
 } 

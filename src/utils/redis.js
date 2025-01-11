@@ -1,8 +1,8 @@
 import { Redis } from '@upstash/redis'
 
 const redis = new Redis({
-  url: import.meta.env.VITE_UPSTASH_KV_REST_API_URL,
-  token: import.meta.env.VITE_UPSTASH_KV_REST_API_TOKEN
+  url: import.meta.env.VITE_UPSTASH_REDIS_REST_URL,
+  token: import.meta.env.VITE_UPSTASH_REDIS_REST_TOKEN,
 })
 
 const PROJECTS_KEY = 'cursor:projects'

@@ -1,17 +1,36 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { extractTwitterUsername, getTwitterProfileImageUrl } from '../utils/twitter';
 import './ProjectForm.css';
 
 function ProjectForm({ onClose, onSubmit }) {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    xUrl: '',
+    projectUrl: '',
     imageUrl: '',
-    projectUrl: ''
+    authorImage: ''
   });
+
+  useEffect(() => {
+    const username = extractTwitterUsername(formData.xUrl);
+    if (username) {
+      const profileImageUrl = getTwitterProfileImageUrl(username);
+      setFormData(prev => ({
+        ...prev,
+        authorImage: profileImageUrl
+      }));
+    }
+  }, [formData.xUrl]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit?.(formData);
+    const submitData = {
+      ...formData,
+      imageUrl: formData.imageUrl.trim() || null,
+      authorImage: formData.authorImage || null
+    };
+    onSubmit?.(submitData);
     onClose();
   };
 
@@ -36,6 +55,17 @@ function ProjectForm({ onClose, onSubmit }) {
             ×
           </button>
         </div>
+
+        {formData.authorImage && (
+          <div className="author-preview">
+            <img 
+              src={formData.authorImage} 
+              alt="Profile" 
+              className="author-image-preview"
+            />
+            <span className="preview-label">Your profile image will be shown</span>
+          </div>
+        )}
 
         <div className="form-group">
           <label htmlFor="title">Project Title</label>
@@ -63,15 +93,29 @@ function ProjectForm({ onClose, onSubmit }) {
         </div>
 
         <div className="form-group">
-          <label htmlFor="imageUrl">Image URL</label>
+          <label htmlFor="imageUrl">
+            Project Image URL <span className="optional-label">(optional)</span>
+          </label>
           <input
             type="url"
             id="imageUrl"
             name="imageUrl"
             value={formData.imageUrl}
             onChange={handleChange}
+            placeholder="Enter image URL (optional)"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="xUrl">X (Twitter) URL</label>
+          <input
+            type="url"
+            id="xUrl"
+            name="xUrl"
+            value={formData.xUrl}
+            onChange={handleChange}
             required
-            placeholder="Enter image URL"
+            placeholder="Enter your X profile URL"
           />
         </div>
 

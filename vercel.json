@@ -1,0 +1,6 @@
+{
+  "env": {
+    "VITE_UPSTASH_KV_REST_API_URL": "@upstash_kv_rest_api_url",
+    "VITE_UPSTASH_KV_REST_API_TOKEN": "@upstash_kv_rest_api_token"
+  }
+} 
