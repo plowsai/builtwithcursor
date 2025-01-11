@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import ProjectGrid from './components/ProjectGrid'
 import ProjectForm from './components/ProjectForm'
@@ -6,61 +6,35 @@ import { useProjects } from './hooks/useProjects'
 
 function App() {
   const [showForm, setShowForm] = useState(false)
-  const { projects, loading, error, addProject } = useProjects()
+  
+  // Add immediate error logging
+  console.log('App rendering, env vars:', {
+    url: import.meta.env.VITE_UPSTASH_KV_REST_API_URL,
+    hasToken: !!import.meta.env.VITE_UPSTASH_KV_REST_API_TOKEN
+  })
 
-  const handleSubmit = async (projectData) => {
-    try {
-      await addProject(projectData)
-      setShowForm(false)
-    } catch (err) {
-      console.error('Failed to add project:', err)
-      // You might want to show an error message to the user here
-    }
-  }
+  try {
+    const { projects, loading, error, addProject } = useProjects()
+    const [submitError, setSubmitError] = useState(null)
 
-  if (error) {
+    // Basic content for testing
+    return (
+      <div className="app">
+        <header className="header">
+          <h1 className="title">Built with Cursor</h1>
+          <p className="subtitle">Test Content</p>
+        </header>
+      </div>
+    )
+  } catch (err) {
+    console.error('Error in App:', err)
     return (
       <div className="error-container">
-        <p>Error loading projects: {error}</p>
+        <h2>Error in application</h2>
+        <p>{err.message}</p>
       </div>
     )
   }
-
-  return (
-    <div className="app">
-      <header className="header">
-        <h1 className="title">Built with Cursor</h1>
-        <p className="subtitle">
-          Discover amazing projects built by the Cursor community. 
-          Share your own project and join the future of AI-powered development.
-        </p>
-      </header>
-
-      <main className="content">
-        <button 
-          className="add-project-button"
-          onClick={() => setShowForm(true)}
-        >
-          + Add Your Project
-        </button>
-
-        {loading ? (
-          <div className="loading-container">
-            <p>Loading projects...</p>
-          </div>
-        ) : (
-          <ProjectGrid projects={projects} />
-        )}
-
-        {showForm && (
-          <ProjectForm 
-            onClose={() => setShowForm(false)}
-            onSubmit={handleSubmit}
-          />
-        )}
-      </main>
-    </div>
-  )
 }
 
 export default App 

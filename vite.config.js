@@ -4,10 +4,9 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: 'dist',
-    sourcemap: true,
-    rollupOptions: {
-      external: ['@upstash/redis']
-    }
+    sourcemap: true
+  },
+  define: {
+    'process.env': process.env
   }
 }) 
